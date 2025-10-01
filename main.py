@@ -2,5 +2,4 @@
 import deepxde
 import torch
 
-def love():
-    print("I love you")
+def pde(i,)
