@@ -4,6 +4,7 @@ import torch
 import trimesh
 import numpy as np
 import os
+import tensorflow as tf
 
 scene = trimesh.load('human_eye.glb')  
 bigbig_mesh = scene.to_geometry()
@@ -77,3 +78,48 @@ def kerr_effect(x,y):
     residual_imag = E_imag_z - (diffraction_imag + kerr_nonlinear_term_imag + absorption_imag)
 
     return [residual_real, residual_imag]
+
+# second harmonic generation
+def shg_pde(x, y):
+    """
+    Second Harmonic Generation (SHG) - Coupled Wave Equations.
+    x: coordinates [x, y, z]
+    y: network output [E_w_real, E_w_imag, E_2w_real, E_2w_imag]
+    """
+    # Split the output into fundamental and second harmonic fields
+    E_w_real, E_w_imag, E_2w_real, E_2w_imag = y[:, 0:1], y[:, 1:2], y[:, 2:3], y[:, 3:4]
+    E_w = tf.complex(E_w_real, E_w_imag)
+    E_2w = tf.complex(E_2w_real, E_2w_imag)
+
+    # PHYSICAL PARAMETERS (You can adjust these)
+    wavelength = 800e-9
+    k_w = 2 * np.pi / wavelength
+    k_2w = 2 * np.pi / (wavelength / 2)
+    deff = 1e-12
+    alpha_w = 0.1
+    alpha_2w = 0.1
+    Delta_k = 2 * k_w - k_2w
+    c = 3e8
+
+    # Calculate derivatives for the fundamental wave (ω)
+    E_w_z = dde.grad.jacobian(y, x, i=0, j=2) + 1j * dde.grad.jacobian(y, x, i=1, j=2)
+    E_w_xx = dde.grad.hessian(y, x, i=0, j=0) + 1j * dde.grad.hessian(y, x, i=1, j=0)
+    E_w_yy = dde.grad.hessian(y, x, i=0, j=1) + 1j * dde.grad.hessian(y, x, i=1, j=1)
+    laplacian_w = E_w_xx + E_w_yy
+
+    # Calculate derivatives for the second harmonic wave (2ω)
+    E_2w_z = dde.grad.jacobian(y, x, i=2, j=2) + 1j * dde.grad.jacobian(y, x, i=3, j=2)
+    E_2w_xx = dde.grad.hessian(y, x, i=2, j=0) + 1j * dde.grad.hessian(y, x, i=3, j=0)
+    E_2w_yy = dde.grad.hessian(y, x, i=2, j=1) + 1j * dde.grad.hessian(y, x, i=3, j=1)
+    laplacian_2w = E_2w_xx + E_2w_yy
+
+    # PDE for the Fundamental Wave (ω)
+    RHS_w = (1j/(2*k_w)) * laplacian_w - (alpha_w/2) * E_w + 1j * (k_w * deff / c) * E_2w * tf.math.conj(E_w) * tf.exp(-1j * Delta_k * x[:, 2:3])
+    residual_w = E_w_z - RHS_w
+
+    # PDE for the Second Harmonic Wave (2ω)
+    RHS_2w = (1j/(2*k_2w)) * laplacian_2w - (alpha_2w/2) * E_2w + 1j * (k_2w * deff / c) * E_w * E_w * tf.exp(1j * Delta_k * x[:, 2:3])
+    residual_2w = E_2w_z - RHS_2w
+
+    # Return the residuals for both real and imaginary parts
+    return tf.concat([tf.math.real(residual_w), tf.math.imag(residual_w), tf.math.real(residual_2w), tf.math.imag(residual_2w)], axis=1)
