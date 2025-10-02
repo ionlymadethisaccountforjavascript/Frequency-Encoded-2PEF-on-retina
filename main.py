@@ -12,96 +12,25 @@ scene = trimesh.load('human_eye.glb')
 iris_mesh = scene.geometry['Eye_Iris_0']
 bigbig_mesh = scene.to_geometry() #probs not needed
 
-vertices = bigbig_mesh.vertices  
-faces = bigbig_mesh.faces       
-
-print(f"Geometry data: {vertices.shape}, {faces.shape}")
-print(f"X: {vertices[:,0].min():.3f} to {vertices[:,0].max():.3f}")
-print(f"Y: {vertices[:,1].min():.3f} to {vertices[:,1].max():.3f}")  
-print(f"Z: {vertices[:,2].min():.3f} to {vertices[:,2].max():.3f}")
+vertices = bigbig_mesh.vertices     #probably not needed
+faces = bigbig_mesh.faces            #probs not needed
+vertices = vertices.astype(np.float32)  # Convert to float32
+faces = faces.astype(np.int32)          # Convert to int32
 
 
+properties = {
+    'Eye_Iris_0': {
+        "collagen_density": 0.8,
+        "melanin_content": 0.7,
+        "is_iris": True
+    },
+    'Eye_Eye_0': {
+        "collagen_density": 0.3,
+        "melanin_content": 0.2,
+        "is_iris": False
+    }
 
-tree = cKDTree(iris_mesh.vertices.astype(np.float32))
-distances,_ = tree.query(vertices, k=1)
-tolerance = 1e-2
-properties['is_iris'] = distances<tolerance
-
-properties['collagen_density'][properties['is_iris']] = 0.8
-properties['melanin_content'][properties['is_iris']] = 0.7
-properties['collagen_density'][~properties['is_iris']] = 0.2
-properties['melanin_content'][~properties['is_iris']] = 0.3
-'''
-'''
-for i,vertex in enumerate(vertices):
-    is_iris = False
-    for iris_vertex in iris_mesh.vertices.astype(np.float32):
-        if np.allclose(vertex, iris_vertex, atol=1e-5):
-            is_iris = True
-            break
-    
-    if is_iris:
-        properties['is_iris'][i] = True
-        properties['collagen_density'][i] = 0.8
-        properties['melanin_content'][i] = 0.7
-    else:
-        properties['is_iris'][i] = False
-        properties['collagen_density'][i] = 0.2
-        properties['melanin_content'][i] = 0.3
-print("=== TESTING PROPERTY ASSIGNMENT ===")
-'''
-'''
-# Test 1: Check counts
-print(f"📊 Total vertices: {len  (vertices)}")
-print(f"🎯 Iris vertices found: {np.sum(properties['is_iris'])}")
-print(f"⚪ Eyeball vertices: {np.sum(~properties['is_iris'])}")
-
-# Test 2: Check value ranges
-print(f"📈 Collagen range: {properties['collagen_density'].min():.1f} to {properties['collagen_density'].max():.1f}")
-print(f"🎨 Melanin range: {properties['melanin_content'].min():.1f} to {properties['melanin_content'].max():.1f}")
-
-# Test 3: Verify iris has correct values
-iris_mask = properties['is_iris']
-print(f"🔍 Iris collagen average: {properties['collagen_density'][iris_mask].mean():.2f}")
-print(f"🔍 Iris melanin average: {properties['melanin_content'][iris_mask].mean():.2f}")
-
-# Test 4: Verify eyeball has correct values  
-eyeball_mask = ~properties['is_iris']
-print(f"🔍 Eyeball collagen average: {properties['collagen_density'][eyeball_mask].mean():.2f}")
-print(f"🔍 Eyeball melanin average: {properties['melanin_content'][eyeball_mask].mean():.2f}")
-
-# Test 5: Visual inspection
-plt.figure(figsize=(15, 5))
-all_vertices = vertices
-# Plot 1: Iris detection
-plt.subplot(1, 3, 1)
-plt.scatter(all_vertices[:,0], all_vertices[:,1], 
-           c=properties['is_iris'], cmap='coolwarm', alpha=0.7, s=10)
-plt.title('Iris Detection\nRed = Iris, Blue = Eyeball')
-plt.colorbar()
-
-# Plot 2: Collagen distribution
-plt.subplot(1, 3, 2)
-plt.scatter(all_vertices[:,0], all_vertices[:,1], 
-           c=properties['collagen_density'], cmap='viridis', alpha=0.7, s=10)
-plt.title('Collagen Density')
-plt.colorbar()
-
-# Plot 3: Melanin distribution
-plt.subplot(1, 3, 3)
-plt.scatter(all_vertices[:,0], all_vertices[:,1], 
-           c=properties['melanin_content'], cmap='hot', alpha=0.7, s=10)
-plt.title('Melanin Content')
-plt.colorbar()
-
-plt.tight_layout()
-plt.savefig('property_test_results.png', dpi=150)
-plt.show()
-
-print("✅ Saved visualization: 'property_test_results.png'")
-
-
-'''
+}
 
 # figure made just to check, will do it thru more detail later on
 
@@ -155,8 +84,8 @@ ax3.set_xlabel('X'); ax3.set_ylabel('Y'); ax3.set_zlabel('Z')
 ax3.legend()
 
 plt.tight_layout()
-plt.show()import trimesh
-import os
+plt.show()
+
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 glb_file = os.path.join(current_dir, "default_eye_ball.glb")
@@ -171,3 +100,4 @@ if isinstance(scene, trimesh.Scene):
 else:
     print(f"Mesh: {len(scene.vertices)} vertices, {len(scene.faces)} faces")
     scene.show()
+
