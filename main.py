@@ -1,3 +1,4 @@
+
 #IMSKBIIDI
 import deepxde
 import torch
@@ -11,27 +12,9 @@ scene = trimesh.load('human_eye.glb')
 iris_mesh = scene.geometry['Eye_Iris_0']
 bigbig_mesh = scene.to_geometry() #probs not needed
 
-vertices = bigbig_mesh.vertices     #probably not needed
-faces = bigbig_mesh.faces            #probs not needed
-vertices = vertices.astype(np.float32)  # Convert to float32
-faces = faces.astype(np.int32)          # Convert to int32
+vertices = bigbig_mesh.vertices  
+faces = bigbig_mesh.faces       
 
-
-properties = {
-    'Eye_Iris_0': {
-        "collagen_density": 0.8,
-        "melanin_content": 0.7,
-        "is_iris": True
-    },
-    'Eye_Eye_0': {
-        "collagen_density": 0.3,
-        "melanin_content": 0.2,
-        "is_iris": False
-    }
-
-}
-
-'''
 print(f"Geometry data: {vertices.shape}, {faces.shape}")
 print(f"X: {vertices[:,0].min():.3f} to {vertices[:,0].max():.3f}")
 print(f"Y: {vertices[:,1].min():.3f} to {vertices[:,1].max():.3f}")  
@@ -172,4 +155,19 @@ ax3.set_xlabel('X'); ax3.set_ylabel('Y'); ax3.set_zlabel('Z')
 ax3.legend()
 
 plt.tight_layout()
-plt.show()
+plt.show()import trimesh
+import os
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+glb_file = os.path.join(current_dir, "default_eye_ball.glb")
+
+scene = trimesh.load(glb_file)
+
+if isinstance(scene, trimesh.Scene):
+    print(f"Scene meshes: {len(scene.geometry)}")
+    for name, mesh in scene.geometry.items():
+        print(f"{name}: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+    scene.show()
+else:
+    print(f"Mesh: {len(scene.vertices)} vertices, {len(scene.faces)} faces")
+    scene.show()
