@@ -247,28 +247,37 @@ def two_pef_pde(x, y):
 
 #doomainz
 geom = dde.geometry.Cuboid(
-    [-0.98, -0.99, -1.02],  # [min_x, min_y, min_z] - back/bottom corner
-    [0.98, 0.97, 1.02]      # [max_x, max_y, max_z] - front/top corner
+    [-0.54, -0.62, -0.54],   # Tight around iris
+    [ 0.54, -0.47,  0.54]    # Your exact iris bounds
 )
 
+# FIXED laser boundary
 def laser_boundary(x, on_boundary):
     if not on_boundary:
         return False
-    is_cornea = x[2] > 0.95
+    # Laser hits FRONT of iris (not cornea)
+    is_front = x[2] > 0.3  # Front surface of iris
+    # Target center region
     iris_center_y = (-0.612905 + -0.472098) / 2
-    target_radius = 0.25
+    target_radius = 0.2
+    # FIXED: Use squared distance correctly
     distance_sq = (x[0] - 0.0)**2 + (x[1] - iris_center_y)**2
-    targets_iris = distance_sq < target_radius**2
-    return is_cornea and targets_iris
+    targets_center = distance_sq < target_radius**2
+    return is_front and targets_center
 
-
+# FIXED Gaussian laser
 def gaussian_laser(x):
     iris_center_y = (-0.612905 + -0.472098) / 2
-    beam_width = 0.2
-    r_squared = (x[:, 0:1] - 0.0)**2 + (x[:, 1:2] - iris_center_y)**2 
+    beam_width = 0.15
+    # FIXED: Correct squared distance calculation
+    r_squared = (x[:, 0:1] - 0.0)**2 + (x[:, 1:2] - iris_center_y)**2
     profile = tf.exp(-r_squared / (beam_width**2))
+    
     return tf.concat([profile, tf.zeros_like(profile), 
                      tf.zeros_like(profile), tf.zeros_like(profile)], axis=1)
+
+# Apply boundary condition
+bc_laser = dde.icbc.DirichletBC(geom, gaussian_laser, laser_boundary)
 
 def create_shg_layers():
     input_dim = 3  
@@ -325,5 +334,56 @@ def create_residual_twophoton():
         x = tf.keras.layers.LayerNormalization()(x)
     
     outputs = tf.keras.layers.Dense(output_dim)(x)
-    
     return tf.keras.Model(inputs=inputs, outputs=outputs)
+
+   
+
+# -----------------------
+# STEP 6: Build and Train model
+# -----------------------
+data = dde.data.PDE(
+    geom=geom,
+    pde=shg_pde,
+    bcs=[bc_laser],
+    num_domain=20000,
+    num_boundary=2000,
+    num_test=2000
+    )
+
+net = create_residual_shg()
+model = dde.Model(data, net)
+model.compile("adam", lr=1e-4)
+losshistory, train_state = model.train(epochs=10000)
+
+# Optional: LBFGS for extra accuracy after Adam
+model.compile("L-BFGS")
+model.train()
+
+X = np.linspace(-0.533915, 0.533915, 100)
+Y = np.linspace(-0.612905, -0.472098, 100)
+Z = np.linspace(0.4, 0.4, 1)  # thin slice at ~front iris
+
+xx, yy, zz = np.meshgrid(X, Y, Z)
+points = np.vstack([xx.ravel(), yy.ravel(), zz.ravel()]).T
+
+# Predict SHG field
+pred = model.predict(points)
+E_real = pred[:, 0]
+E_imag = pred[:, 1]
+intensity = E_real**2 + E_imag**2
+
+# Plot 2D SHG intensity map (X vs Y at Z ≈ 0.4)
+plt.figure(figsize=(8, 6))
+plt.imshow(intensity.reshape(100, 100),
+           cmap='hot',
+           extent=[X.min(), X.max(), Y.min(), Y.max()],
+           origin='lower')  # flip Y-axis to match coord orientation
+
+plt.title("SHG Intensity (Slice at Z ≈ 0.4)")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.colorbar(label="Intensity")
+plt.tight_layout()
+plt.show()
+
+    
