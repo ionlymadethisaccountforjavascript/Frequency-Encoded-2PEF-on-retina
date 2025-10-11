@@ -257,16 +257,16 @@ def laser_boundary(x, on_boundary):
     is_cornea = x[2] > 0.95
     iris_center_y = (-0.612905 + -0.472098) / 2
     target_radius = 0.25
-    distance_sq = (x[0] - 0.0) + (x[1] - iris_center_y)
-    targets_iris = distance_sq < target_radius
+    distance_sq = (x[0] - 0.0)**2 + (x[1] - iris_center_y)**2
+    targets_iris = distance_sq < target_radius**2
     return is_cornea and targets_iris
 
 
 def gaussian_laser(x):
     iris_center_y = (-0.612905 + -0.472098) / 2
     beam_width = 0.2
-    r_squared = (x[:, 0:1] - 0.0) + (x[:, 1:2] - iris_center_y) 
-    profile = tf.exp(-r_squared / (beam_width))
+    r_squared = (x[:, 0:1] - 0.0)**2 + (x[:, 1:2] - iris_center_y)**2 
+    profile = tf.exp(-r_squared / (beam_width**2))
     return tf.concat([profile, tf.zeros_like(profile), 
                      tf.zeros_like(profile), tf.zeros_like(profile)], axis=1)
 
