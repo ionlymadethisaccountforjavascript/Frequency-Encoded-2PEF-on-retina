@@ -206,3 +206,124 @@ def shg_pde(x, y):
     # Return the residuals for both real and imaginary parts
     return tf.concat([tf.math.real(residual_w), tf.math.imag(residual_w), tf.math.real(residual_2w), tf.math.imag(residual_2w)], axis=1)
 
+def two_pef_pde(x, y):
+
+    E_real, E_imag, C = y[:, 0:1], y[:, 1:2], y[:, 2:3]
+    E = tf.complex(E_real, E_imag)
+
+    # PHYSICAL PARAMETERS
+    wavelength = 800e-9
+    k = 2 * np.pi / wavelength
+    alpha = 0.3
+    sigma = 1e-20
+    D = 1e-14
+    k_f = 0.1
+    eta = 0.5
+    I_sat = 1e13
+
+    # light propagation pde (i defined earlier too wth)
+    E_z = dde.grad.jacobian(y, x, i=0, j=2) + 1j * dde.grad.jacobian(y, x, i=1, j=2)
+    E_xx = dde.grad.hessian(y, x, i=0, j=0) + 1j * dde.grad.hessian(y, x, i=1, j=0)
+    E_yy = dde.grad.hessian(y, x, i=0, j=1) + 1j * dde.grad.hessian(y, x, i=1, j=1)
+    laplacian_E = E_xx + E_yy
+
+    intensity = tf.math.real(E * tf.math.conj(E))
+    intensity_sq = intensity ** 2
+
+    RHS_E = (1j/(2*k)) * laplacian_E - ( (alpha/2) + (sigma/2) * C ) * E
+    residual_E = E_z - RHS_E
+
+    # fluorophore concentration pde
+    C_t = dde.grad.jacobian(y, x, i=2, j=3)
+    C_xx = dde.grad.hessian(y, x, i=2, j=0)
+    C_yy = dde.grad.hessian(y, x, i=2, j=1)
+    laplacian_C = C_xx + C_yy
+
+    source_term = eta * sigma * intensity_sq / (1 + intensity_sq / I_sat)
+    RHS_C = D * laplacian_C - k_f * C + source_term
+    residual_C = C_t - RHS_C
+
+    return tf.concat([tf.math.real(residual_E), tf.math.imag(residual_E), residual_C], axis=1)
+
+#doomainz
+geom = dde.geometry.Cuboid(
+    [-0.98, -0.99, -1.02],  # [min_x, min_y, min_z] - back/bottom corner
+    [0.98, 0.97, 1.02]      # [max_x, max_y, max_z] - front/top corner
+)
+
+def laser_boundary(x, on_boundary):
+    if not on_boundary:
+        return False
+    is_cornea = x[2] > 0.95
+    iris_center_y = (-0.612905 + -0.472098) / 2
+    target_radius = 0.25
+    distance_sq = (x[0] - 0.0) + (x[1] - iris_center_y)
+    targets_iris = distance_sq < target_radius
+    return is_cornea and targets_iris
+
+
+def gaussian_laser(x):
+    iris_center_y = (-0.612905 + -0.472098) / 2
+    beam_width = 0.2
+    r_squared = (x[:, 0:1] - 0.0) + (x[:, 1:2] - iris_center_y) 
+    profile = tf.exp(-r_squared / (beam_width))
+    return tf.concat([profile, tf.zeros_like(profile), 
+                     tf.zeros_like(profile), tf.zeros_like(profile)], axis=1)
+
+def create_shg_layers():
+    input_dim = 3  
+    output_dim = 4  
+    
+    network = dde.nn.FNN(
+        [input_dim] + [256] * 8 + [output_dim],
+        "tanh",
+        "Glorot normal"
+    )
+    return network
+
+def create_twophoton_layers():
+    input_dim = 4  
+    output_dim = 3  
+    
+    network = dde.nn.FNN(
+        [input_dim] + [192] * 8 + [output_dim],
+        "tanh", 
+        "He normal"
+    )
+    return network
+
+def create_residual_shg():
+    input_dim = 3
+    output_dim = 4
+    
+    inputs = tf.keras.layers.Input(shape=(input_dim,))
+    
+    x = tf.keras.layers.Dense(256, activation="swish")(inputs)
+    for _ in range(6):
+        residual = x
+        x = tf.keras.layers.Dense(256, activation="swish")(x)
+        x = tf.keras.layers.Dense(256, activation="swish")(x)
+        x = tf.keras.layers.Add()([x, residual])
+        x = tf.keras.layers.LayerNormalization()(x)
+    
+    outputs = tf.keras.layers.Dense(output_dim)(x)
+    
+    return tf.keras.Model(inputs=inputs, outputs=outputs)
+
+def create_residual_twophoton():
+    input_dim = 4
+    output_dim = 3
+    
+    inputs = tf.keras.layers.Input(shape=(input_dim,))
+    
+    x = tf.keras.layers.Dense(192, activation="swish")(inputs)
+    for _ in range(5):
+        residual = x
+        x = tf.keras.layers.Dense(192, activation="swish")(x)
+        x = tf.keras.layers.Dense(192, activation="swish")(x)
+        x = tf.keras.layers.Add()([x, residual])
+        x = tf.keras.layers.LayerNormalization()(x)
+    
+    outputs = tf.keras.layers.Dense(output_dim)(x)
+    
+    return tf.keras.Model(inputs=inputs, outputs=outputs)
