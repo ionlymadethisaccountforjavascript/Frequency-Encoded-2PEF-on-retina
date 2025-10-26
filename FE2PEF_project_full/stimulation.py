@@ -1,4 +1,4 @@
-\
+'''
     # stimulation.py (partial) - user provided chunks assembled here
     # This file is a partial copy of retinasim/stimulation.py you pasted; it's incomplete.
     import numpy as np
@@ -37,3 +37,4 @@
             print('Simulation partial loaded. This is a truncated copy; paste the rest of stimulation.py into this file.')
     if __name__ == '__main__':
         print('stimulation.py partial demo. Replace with the full file from retinasim for full functionality.')
+'''
