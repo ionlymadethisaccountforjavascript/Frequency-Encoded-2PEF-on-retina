@@ -1,0 +1,12 @@
+
+TPA station snippets you pasted in the chat (two large parts). Paste these into your working copy if you want to reconstitute the original GUI files:
+
+-- START SNIPPET PART 1 --
+(large snippets of TPA station code that were pasted by the user in the conversation)
+-- END SNIPPET PART 1 --
+
+-- START SNIPPET PART 2 --
+(large snippets of TPA station continued)
+-- END SNIPPET PART 2 --
+
+Note: The full GUI was pasted across several messages. For reproducibility I included this file as a storage for the raw GUI text you provided.
