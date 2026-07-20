@@ -6,4 +6,6 @@ Each of the stages of the model have been split into different files, and to con
 ```
 py run_comparison.py
 ```
-when you're CDed into your project directory.
+when your file path is set to your project directory.
+
+The aim of the simulation is to essentially show that there is an improvement in image quality when conducting TPEF along with Frequency Encoding.
