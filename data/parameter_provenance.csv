@@ -1,0 +1,15 @@
+parameter,default_value,status,required_replacement_for_publication
+laser_1_wavelength_nm,740,design_choice,optimize using measured two-photon pathway spectra and ocular transmission
+laser_2_wavelength_nm,910,design_choice,optimize using measured two-photon pathway spectra and ocular transmission
+modulation_frequencies_MHz,"4.6;3.1",literature_inspired,verify AOM detector and pixel-dwell compatibility
+modulation_depth,0.8,design_choice,measure actual modulation transfer and uncertainty
+pulse_repetition_rate_MHz,80,presentation_parameter,replace with actual laser specification
+pulse_width_fs,100,presentation_parameter,replace with autocorrelator or manufacturer measurement
+average_power_mW,"1;1",presentation_parameter,do not use as a safety claim; measure power at cornea/sample
+psf_sigma_xy_um,1.5,simulation_assumption,replace with bead measurement or validated optical model
+pathway_responses,normalized illustrative,placeholder,replace with pure-sample calibration and uncertainty
+emission_mixing,normalized illustrative,placeholder,replace with measured spectra filters and detector response
+background_counts_per_sample,0.04,simulation_assumption,replace with detector dark/background frames
+read_noise_std_counts,0.35,simulation_assumption,replace with detector calibration
+detector_bandwidth_MHz,12,simulation_assumption,replace with PMT/amplifier/lock-in transfer function
+RPE_morphology,synthetic Voronoi mosaic,morphology_prior,replace or validate against licensed retinal datasets

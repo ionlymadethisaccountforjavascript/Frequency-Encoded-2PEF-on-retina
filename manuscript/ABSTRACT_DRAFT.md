@@ -1,0 +1,9 @@
+# Abstract draft - replace bracketed values after calibrated runs
+
+Retinal autofluorescence contains contributions from multiple endogenous fluorophores with broad and overlapping emission spectra, limiting molecular discrimination by intensity-based detection. Frequency-encoded two-photon excited fluorescence (FE-2PEF) separates fluorophores through their excitation responses using two intensity-modulated lasers, a single detector, lock-in demodulation, and nonnegative unmixing. Here, we present a reproducible computational framework for evaluating FE-2PEF in retinal autofluorescence imaging.
+
+The model represents species-specific concentration maps, a configurable retinal point-spread function, degenerate and mixed two-photon excitation pathways, finite detector bandwidth, photon shot noise, additive background, and read noise. Calibrated nonnegative least squares and regularized nonnegative matrix factorization were compared with conventional emission-filtered TPEF under matched acquisition assumptions. Performance was evaluated across additive-noise level, spatial overlap, fluorophore brightness ratio, and excitation-signature conditioning.
+
+Using [measured fluorophore pair] signatures at [laser wavelengths], FE-2PEF achieved [metric and value] under [condition], compared with [baseline value]. Its advantage increased when [supported result], whereas performance deteriorated under [supported failure regime]. Direct waveform simulations agreed with the analytic channel model within [value].
+
+These results identify the experimental regimes in which FE-2PEF may improve retinal fluorophore unmixing and the regimes in which conventional multi-detector imaging remains preferable. The study is computational and does not establish in-vivo safety, diagnostic performance, or super-resolution capability.

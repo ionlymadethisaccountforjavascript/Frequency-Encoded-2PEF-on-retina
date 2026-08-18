@@ -1,0 +1,67 @@
+name: legacy_low_frequency_demonstration_only
+seed: 20260806
+species: [A2E_like, FAD_like]
+pathway_responses_csv: data/example_pathway_responses.csv
+
+grid:
+  shape: [32, 32]
+  pixel_size_um: 1.0
+
+laser1:
+  wavelength_nm: 880.0
+  average_power_mw: 1.0
+  modulation_frequency_hz: 40.0
+  modulation_depth: 0.8
+  phase_rad: 0.0
+
+laser2:
+  wavelength_nm: 900.0
+  average_power_mw: 1.0
+  modulation_frequency_hz: 90.0
+  modulation_depth: 0.8
+  phase_rad: 0.0
+
+pulse:
+  repetition_rate_hz: 80000000.0
+  pulse_width_fs: 100.0
+  temporal_overlap: 0.9
+
+psf:
+  sigma_xy_um: 4.0
+  sigma_z_um: 8.0
+
+detector:
+  dwell_time_s: 0.2
+  sample_rate_hz: 2000.0
+  photons_per_relative_unit_per_sample: 0.02
+  background_counts_per_sample: 0.04
+  dark_counts_per_sample: 0.002
+  read_noise_std_counts: 0.35
+  detector_bandwidth_hz: 500.0
+  saturation_counts: null
+  relative_intensity_noise_std: 0.0
+
+phantom:
+  kind: two_spot
+  n_cells: 2
+  granules_per_cell: 1
+  overlap_fraction: 0.0
+  separation_um: 25.0
+
+unmixing:
+  components: 2
+  alpha_l1: 0.01
+  alpha_l2: 0.01
+  iterations: 500
+  restarts: 2
+  tolerance: 0.0000001
+
+simulation:
+  mode: analytic
+  channels: [dc, f1, f2, difference]
+  chunk_pixels: 128
+  subtract_known_background: true
+
+baseline:
+  emission_matrix_csv: data/example_emission_mixing.csv
+  optical_throughput: 0.35

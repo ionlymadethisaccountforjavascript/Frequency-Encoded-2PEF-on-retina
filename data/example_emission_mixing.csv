@@ -1,0 +1,7 @@
+detector,species,response,provenance
+short_band,A2E_like,0.55,illustrative_overlapping_emission_placeholder
+short_band,FAD_like,0.65,illustrative_overlapping_emission_placeholder
+short_band,Lipofuscin_residual_like,0.58,illustrative_overlapping_emission_placeholder
+long_band,A2E_like,0.45,illustrative_overlapping_emission_placeholder
+long_band,FAD_like,0.35,illustrative_overlapping_emission_placeholder
+long_band,Lipofuscin_residual_like,0.42,illustrative_overlapping_emission_placeholder

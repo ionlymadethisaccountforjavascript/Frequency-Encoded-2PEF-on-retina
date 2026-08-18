@@ -1,0 +1,10 @@
+{
+  "diagnostics": {
+    "chunk_pixels": 4.0,
+    "detector": "{'dwell_time_s': 4e-05, 'sample_rate_hz': 50000000.0, 'photons_per_relative_unit_per_sample': 0.35, 'background_counts_per_sample': 0.0, 'dark_counts_per_sample': 0.0, 'read_noise_std_counts': 0.0, 'detector_bandwidth_hz': 12000000.0, 'saturation_counts': None, 'relative_intensity_noise_std': 0.0}",
+    "samples_per_dwell": 2000.0,
+    "time_window_s": 4e-05
+  },
+  "maximum_relative_error": 1.0210278541131697e-14,
+  "mean_relative_error": 1.3553548006995797e-15
+}

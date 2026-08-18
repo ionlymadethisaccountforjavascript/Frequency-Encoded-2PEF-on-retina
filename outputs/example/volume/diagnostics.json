@@ -1,0 +1,109 @@
+{
+  "blind_nmf_iterations": 800,
+  "blind_nmf_objective": 556.0420199316663,
+  "config": {
+    "baseline": {
+      "emission_matrix_csv": "data/example_emission_mixing.csv",
+      "optical_throughput": 0.35
+    },
+    "detector": {
+      "background_counts_per_sample": 0.04,
+      "dark_counts_per_sample": 0.002,
+      "detector_bandwidth_hz": 12000000.0,
+      "dwell_time_s": 4e-05,
+      "photons_per_relative_unit_per_sample": 0.35,
+      "read_noise_std_counts": 0.35,
+      "relative_intensity_noise_std": 0.0,
+      "sample_rate_hz": 50000000.0,
+      "saturation_counts": null
+    },
+    "grid": {
+      "pixel_size_um": 1.0,
+      "shape": [
+        12,
+        64,
+        64
+      ]
+    },
+    "laser1": {
+      "average_power_mw": 1.0,
+      "modulation_depth": 0.8,
+      "modulation_frequency_hz": 4600000.0,
+      "phase_rad": 0.0,
+      "wavelength_nm": 740.0
+    },
+    "laser2": {
+      "average_power_mw": 1.0,
+      "modulation_depth": 0.8,
+      "modulation_frequency_hz": 3100000.0,
+      "phase_rad": 0.0,
+      "wavelength_nm": 910.0
+    },
+    "name": "small_3d_rpe_volume_demo",
+    "pathway_responses_csv": "data/example_pathway_responses.csv",
+    "phantom": {
+      "granules_per_cell": 10,
+      "kind": "rpe_volume",
+      "n_cells": 12,
+      "overlap_fraction": 0.25,
+      "separation_um": 8.0
+    },
+    "psf": {
+      "sigma_xy_um": 1.5,
+      "sigma_z_um": 3.0
+    },
+    "pulse": {
+      "pulse_width_fs": 100.0,
+      "repetition_rate_hz": 80000000.0,
+      "temporal_overlap": 0.9
+    },
+    "seed": 20260806,
+    "simulation": {
+      "channels": [
+        "dc",
+        "f1",
+        "f2",
+        "difference"
+      ],
+      "chunk_pixels": 512,
+      "mode": "analytic",
+      "subtract_known_background": true
+    },
+    "species": [
+      "A2E_like",
+      "FAD_like"
+    ],
+    "unmixing": {
+      "alpha_l1": 0.01,
+      "alpha_l2": 0.01,
+      "components": 2,
+      "iterations": 800,
+      "restarts": 3,
+      "tolerance": 1e-07
+    }
+  },
+  "config_path": "/mnt/data/FE2PEF_Retina_Publishable/configs/rpe_volume_demo.yaml",
+  "detector_names": [
+    "long_band",
+    "short_band"
+  ],
+  "emission": {
+    "mean_detected_counts_per_sample": 0.06485713204647162,
+    "optical_throughput": 0.35,
+    "samples_per_dwell": 2000.0
+  },
+  "emission_path": "/mnt/data/FE2PEF_Retina_Publishable/data/example_emission_mixing.csv",
+  "emission_signature_condition_number": 10.403882032022066,
+  "fe": {
+    "background_counts_per_sample": 0.042,
+    "channel_noise_std_mean": 0.020016832329636868,
+    "maximum_dc_counts_per_sample": 0.6581406518299918,
+    "mean_dc_counts_per_sample": 0.34830120433461964,
+    "samples_per_dwell": 2000.0
+  },
+  "fe_signature_condition_number": 5.596612330195987,
+  "phantom_metadata_keys": [
+    "kind"
+  ],
+  "response_path": "/mnt/data/FE2PEF_Retina_Publishable/data/example_pathway_responses.csv"
+}

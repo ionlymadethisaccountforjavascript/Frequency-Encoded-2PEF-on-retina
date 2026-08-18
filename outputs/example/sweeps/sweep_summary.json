@@ -1,0 +1,15 @@
+{
+  "files": [
+    "noise_sweep.csv",
+    "separation_sweep.csv",
+    "brightness_sweep.csv",
+    "signature_similarity_sweep.csv",
+    "photon_budget_sweep.csv",
+    "detector_bandwidth_sweep.csv",
+    "temporal_overlap_sweep.csv",
+    "emission_overlap_sweep.csv",
+    "emission_throughput_sweep.csv"
+  ],
+  "output_dir": "outputs/example/sweeps",
+  "replicates": 4
+}

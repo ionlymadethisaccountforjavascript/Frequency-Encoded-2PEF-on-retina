@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+title: RetinaFE: Frequency-Encoded Two-Photon Retinal Fluorescence Simulation
+message: Please cite this software and the 2023 FE-2PEF method paper.
+type: software
+version: 0.1.0
+date-released: 2026-08-06
+authors:
+  - family-names: Mandala
+    given-names: Aarush
+  - family-names: Duan
+    given-names: Youbin
+license: MIT
+repository-code: https://github.com/ionlymadethisaccountforjavascript/Frequency-Encoded-2PEF-on-retina
+references:
+  - type: article
+    title: Frequency-encoded two-photon excited fluorescence microscopy
+    authors:
+      - family-names: Heuke
+        given-names: Sandro
+      - family-names: Silva Martins
+        given-names: Carla
+      - family-names: André
+        given-names: Rémi
+      - family-names: LeGoff
+        given-names: Loic
+      - family-names: Rigneault
+        given-names: Hervé
+    journal: Optics Letters
+    volume: 48
+    start: 4113
+    end: 4116
+    year: 2023
+    doi: 10.1364/OL.496071
