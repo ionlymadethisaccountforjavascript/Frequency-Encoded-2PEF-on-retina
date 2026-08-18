@@ -8,3 +8,7 @@ dist/
 outputs/*
 !outputs/example/
 .DS_Store
+references.bib
+run_example.ps1
+run_example.sh
+
