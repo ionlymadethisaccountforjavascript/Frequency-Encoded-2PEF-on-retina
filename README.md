@@ -94,19 +94,7 @@ The demo produces:
 
 The sweeps save every replicate, not only mean curves. This is important for uncertainty estimates and statistical analysis.
 
-## What must happen before journal submission
-
-1. Measure or digitize two-photon pathway responses for each fluorophore at the actual laser pair.
-2. Use calibration samples to estimate the channel-signature matrix and its uncertainty.
-3. Validate the detector noise model with dark frames and uniform fluorescent samples.
-4. Add a physical phantom, cultured RPE sample, ex-vivo tissue, or collaboration data.
-5. Register the analysis plan before selecting only favourable parameter regimes.
-6. Report conditions where FE-2PEF is worse than multi-detector TPEF.
-7. Remove clinical-diagnosis and ocular-safety claims unless independently established.
-
-See `docs/PUBLICATION_ROADMAP.md`, `docs/SCIENTIFIC_SCOPE.md`, `docs/EXPERIMENTAL_VALIDATION_PROTOCOL.md`, and `PROJECT_STATUS.md`.
-
-## Core reference
+## Core references
 
 S. Heuke, C. Silva Martins, R. André, L. LeGoff, and H. Rigneault, “Frequency-encoded two-photon excited fluorescence microscopy,” *Optics Letters* **48**, 4113–4116 (2023). DOI: `10.1364/OL.496071`.
 
