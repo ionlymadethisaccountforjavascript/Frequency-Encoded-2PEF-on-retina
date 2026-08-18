@@ -1,0 +1,2 @@
+[console_scripts]
+retinafe = fe2pef_retina.cli:main
