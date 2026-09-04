@@ -1,8 +1,6 @@
-# RetinaFE
+**A simulation framework for frequency-encoded two-photon excited fluorescence (FE-2PEF) in retinal autofluorescence.**
 
-**A reproducible simulation framework for frequency-encoded two-photon excited fluorescence (FE-2PEF) in retinal autofluorescence.**
-
-This repository is a clean rebuild of the project concept. It implements the frequency-encoding mechanism described by Heuke *et al.*: two intensity-modulated excitation lasers, three two-photon pathways, a single detector, phase-aware lock-in channels, and nonnegative signal unmixing. It then applies that framework to transparent retinal morphology phantoms and compares it with conventional emission-filtered TPEF.
+This repository is a clean rebuild of the project concept. It implements the frequency-encoding mechanism described by Heuke *et al.*: two intensity-modulated excitation lasers, three two-photon pathways, a single detector, phase-aware lock-in channels, and nonnegative signal unmixing. It then applies that framework to transparent retinal morphology phantoms and compares it with conventional TPEF.
 
 ## Read this before using the results
 
@@ -28,7 +26,7 @@ The simulation can support a paper; it does not guarantee publication. The stron
 
 ## Fast start
 
-Windows users can double-click `run_windows.bat`; see `docs/QUICKSTART_WINDOWS.md`. macOS/Linux users can run `./run_example.sh`.
+Windows:`run_windows.bat`; see `docs/QUICKSTART_WINDOWS.md`. macOS/Linux:`./run_example.sh`.
 
 ## Installation
 
@@ -101,7 +99,3 @@ S. Heuke, C. Silva Martins, R. André, L. LeGoff, and H. Rigneault, “Frequency
 ## Authors
 
 Aarush Mandala and Youbin Duan.
-
-## License
-
-MIT. Scientific datasets and third-party papers retain their own licenses.
