@@ -92,6 +92,9 @@ The demo produces:
 
 The sweeps save every replicate, not only mean curves. This is important for uncertainty estimates and statistical analysis.
 
+[![DOI](https://zenodo.org)](https://doi.org/10.5281/zenodo.22305474)
+
+
 ## References
 
 S. Heuke, C. Silva Martins, R. André, L. LeGoff, and H. Rigneault, “Frequency-encoded two-photon excited fluorescence microscopy,” *Optics Letters* **48**, 4113–4116 (2023). DOI: `10.1364/OL.496071`.
