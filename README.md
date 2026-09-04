@@ -77,7 +77,7 @@ The tests check channel equations, direct-versus-analytic demodulation, unmixing
 - `rpe_volume_demo.yaml`: small 3-D software demonstration.
 - `legacy_40hz_90hz_demonstration_only.yaml`: preserves the earlier low-frequency idea, but uses a long dwell because 40/90 Hz tags are not compatible with ordinary fast raster scanning.
 
-## Output structure
+## Output
 
 The demo produces:
 
@@ -92,7 +92,7 @@ The demo produces:
 
 The sweeps save every replicate, not only mean curves. This is important for uncertainty estimates and statistical analysis.
 
-## Core references
+## References
 
 S. Heuke, C. Silva Martins, R. André, L. LeGoff, and H. Rigneault, “Frequency-encoded two-photon excited fluorescence microscopy,” *Optics Letters* **48**, 4113–4116 (2023). DOI: `10.1364/OL.496071`.
 
